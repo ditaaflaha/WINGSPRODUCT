@@ -57,21 +57,32 @@
                         <th class="py-3 px-4">Nama</th>
                         <th class="py-3 px-4">Deskripsi</th>
                         <th class="py-3 px-4">Harga</th>
+                        <th class="py-3 px-4">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-700">
-                    @forelse ($produk as $item)
-                        <tr class="hover:bg-gray-700">
-                            <td class="py-3 px-4 font-medium">{{ $loop->iteration }}</td>
-                            <td class="py-3 px-4">{{ $item->nama }}</td>
-                            <td class="py-3 px-4">{{ $item->deskripsi }}</td>
-                            <td class="py-3 px-4 text-white font-semibold">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="py-4 px-4 text-center text-gray-500">Belum ada produk.</td>
-                        </tr>
-                    @endforelse
+                    @foreach ($produk as $index => $item)
+                    <tr class="hover:bg-gray-700">
+                        <td class="py-3 px-4">{{ $index + 1 }}</td>
+                        <td class="py-3 px-4">{{ $item->nama }}</td>
+                        <td class="py-3 px-4">{{ $item->deskripsi }}</td>
+                        <td class="py-3 px-4 text-white font-semibold">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex gap-2">
+                                <a href="{{ route('produk.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                                    ✏️ Edit
+                                </a>
+                                <form action="{{ route('produk.delete', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ $item->nama }}?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                        🗑️ Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
