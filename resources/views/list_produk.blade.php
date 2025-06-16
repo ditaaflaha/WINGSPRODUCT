@@ -2,67 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Wings Market</title>
+    <title>Daftar Produk Wings</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-900 min-h-screen py-8 px-4 text-gray-100">
 
     <!-- Navbar -->
-    <nav class="bg-white shadow">
+    <nav class="bg-gray-800 shadow mb-8">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-extrabold text-blue-600">WingsStore</div>
-            <ul class="flex gap-6 text-sm text-gray-600 font-medium">
-                <li><a href="#" class="hover:text-blue-600">Beranda</a></li>
-                <li><a href="#" class="hover:text-blue-600">Tentang</a></li>
-                <li><a href="#" class="hover:text-blue-600">Kontak</a></li>
+            <div class="text-2xl font-extrabold text-white">WingsStore</div>
+            <ul class="flex gap-6 text-sm text-gray-300 font-medium">
+                <li><a href="#" class="hover:text-white">Beranda</a></li>
+                <li><a href="#" class="hover:text-white">Tentang</a></li>
+                <li><a href="#" class="hover:text-white">Kontak</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="bg-blue-100 py-16 px-6 text-center">
-        <h1 class="text-4xl font-extrabold text-blue-800 mb-4">Temukan Produk Wings yang Halal dan Etis</h1>
-        <p class="text-lg text-blue-700">Dukung brand yang mendukung Palestina 🇵🇸</p>
-    </section>
+    <!-- Form Input -->
+    <div class="max-w-3xl mx-auto bg-gray-800 shadow-lg rounded-lg p-8 mb-10">
+        <h1 class="text-3xl font-bold text-white mb-6 text-center">🛍️ Input Produk</h1>
+        <form method="POST" action="{{ route('produk.simpan') }}" class="space-y-5">
+            @csrf
+            <div>
+                <label class="block text-gray-300 font-semibold mb-1">Nama Produk</label>
+                <input type="text" name="nama" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded text-white focus:ring-2 focus:ring-gray-500" required>
+            </div>
+            <div>
+                <label class="block text-gray-300 font-semibold mb-1">Deskripsi</label>
+                <textarea name="deskripsi" rows="3" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded text-white focus:ring-2 focus:ring-gray-500" required></textarea>
+            </div>
+            <div>
+                <label class="block text-gray-300 font-semibold mb-1">Harga</label>
+                <input type="number" name="harga" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded text-white focus:ring-2 focus:ring-gray-500" required>
+            </div>
+            <div>
+                <button type="submit" class="bg-white text-gray-900 px-5 py-2 rounded hover:bg-gray-200 transition">
+                    💾 Simpan
+                </button>
+            </div>
+        </form>
+    </div>
 
-    <!-- Produk Tabel -->
-    <main class="max-w-7xl mx-auto px-6 py-16">
-        <h2 class="text-2xl font-bold text-gray-700 mb-10 text-center">📋 Daftar Produk Wings</h2>
-
+    <!-- Tabel Produk -->
+    <div class="max-w-5xl mx-auto bg-gray-800 shadow-lg rounded-lg p-6 mb-10">
+        <h2 class="text-2xl font-bold text-white mb-4">📋 Daftar Produk</h2>
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 bg-white rounded-xl shadow text-sm">
-                <thead class="bg-gray-100 text-gray-600 font-semibold text-left">
+            <table class="min-w-full divide-y divide-gray-700 text-sm text-gray-200">
+                <thead class="bg-gray-700 text-white">
                     <tr>
-                        <th class="px-6 py-4">No</th>
-                        <th class="px-6 py-4">Nama Produk</th>
-                        <th class="px-6 py-4">Deskripsi</th>
-                        <th class="px-6 py-4">Harga</th>
+                        <th class="py-3 px-4">#</th>
+                        <th class="py-3 px-4">Nama</th>
+                        <th class="py-3 px-4">Deskripsi</th>
+                        <th class="py-3 px-4">Harga</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 text-gray-800">
-                    @foreach ($nama as $index => $item)
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 font-medium">{{ $item }}</td>
-                        <td class="px-6 py-4">{{ $desc[$index] }}</td>
-                        <td class="px-6 py-4 text-blue-600 font-semibold">Rp{{ number_format($harga[$index], 0, ',', '.') }}</td>
-                    </tr>
-                    @endforeach
+                <tbody class="divide-y divide-gray-700">
+                    @forelse ($produk as $item)
+                        <tr class="hover:bg-gray-700">
+                            <td class="py-3 px-4 font-medium">{{ $loop->iteration }}</td>
+                            <td class="py-3 px-4">{{ $item->nama }}</td>
+                            <td class="py-3 px-4">{{ $item->deskripsi }}</td>
+                            <td class="py-3 px-4 text-white font-semibold">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="py-4 px-4 text-center text-gray-500">Belum ada produk.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-    </main>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t mt-16 py-6 text-center text-sm text-gray-500">
+    <footer class="text-center text-sm text-gray-500">
         &copy; {{ date('Y') }} WingsStore. All rights reserved.
     </footer>
-
 </body>
 </html>

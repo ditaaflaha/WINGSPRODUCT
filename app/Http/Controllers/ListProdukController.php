@@ -7,23 +7,31 @@ use App\Models\Produk;
 
 class ListProdukController extends Controller
 {
+    // Menampilkan daftar produk
     public function show()
     {
-        $data = Produk::all();
+        $produk = Produk::all(); // ambil semua data produk
+        return view('list_produk', compact('produk'));
+    }
 
-        // Inisialisasi array kosong
-        $nama = [];
-        $desc = [];
-        $harga = [];
+    // Menyimpan data produk baru
+    public function simpan(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'harga' => 'required|numeric|min:0',
+        ]);
 
-        // Isi array
-        foreach ($data as $produk) {
-            $nama[] = $produk->nama;
-            $desc[] = $produk->deskripsi;
-            $harga[] = $produk->harga;
-        }
+        // Simpan ke tabel tblproduk
+        Produk::create([
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
+            'harga' => $request->harga,
+        ]);
 
-        // Kirim ke view
-        return view('list_produk', compact('nama', 'desc', 'harga'));
+        // Kembali ke halaman list produk
+        return redirect()->route('produk.list')->with('success', 'Produk berhasil ditambahkan!');
     }
 }
